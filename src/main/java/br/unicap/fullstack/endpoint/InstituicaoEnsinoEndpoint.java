@@ -5,8 +5,10 @@
  */
 package br.unicap.fullstack.endpoint;
 
-import br.unicap.fullstack.model.Desenvolvedor;
-import br.unicap.fullstack.service.DesenvolvedorService;
+
+import br.unicap.fullstack.model.InstituicaoEnsino;
+
+import br.unicap.fullstack.service.InstituicaoEnsinoService;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -15,53 +17,54 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 /**
  *
  * @author Tj
  */
-@Path("/hello")
-public class DesenvolvedorEndPoint {
+@Path("/ie")
+public class InstituicaoEnsinoEndpoint {
 
     @Inject
-    DesenvolvedorService service;
+    InstituicaoEnsinoService service;
     
     
-    @GET
-    @Path("fill")
-    @Produces("application/json")
-    public Response fill() throws Exception {
-        service.fill();
-        return Response.ok().build();
-    }
-    
+  
     @GET
     @Produces("application/json")
-    public List<Desenvolvedor> list() throws Exception {
+    public List<InstituicaoEnsino> list() throws Exception {
         return service.list();
     }
     
+    @GET
+    @Produces("application/json")
+    @Path("/{description:.+}")
+    public List<InstituicaoEnsino> list(
+            @PathParam("description") String description) throws Exception {
+        return service.filterByDescription(description);
+    }
+   
     @PUT
     @Consumes("application/json")
-    public Response add(Desenvolvedor desenv) {
-        service.insert(desenv);
+    public Response add(InstituicaoEnsino instituicaoEnsino) {
+        service.insert(instituicaoEnsino);
         return Response.ok().build();
     }
    
     @POST
     @Consumes("application/json")
-    public Response update(Desenvolvedor desenv) {
-        if(desenv.getNome()==null || desenv.getNome().isEmpty()) 
-            return Response.serverError().build();
-        service.update(desenv);
+    public Response update(InstituicaoEnsino instituicaoEnsino) {
+        
+        service.update(instituicaoEnsino);
         return Response.ok().build();
     }
     
     @DELETE
     @Consumes("application/json")
-    public Response delete(Desenvolvedor desenv) {
-        service.delete(desenv);
+    public Response delete(InstituicaoEnsino instituicaoEnsino) {
+        service.delete(instituicaoEnsino);
         return Response.ok().build();
     }
    
